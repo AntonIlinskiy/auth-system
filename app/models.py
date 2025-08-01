@@ -23,12 +23,13 @@ role_permissions = Table(
 # Модель пользователя
 class User(Base):
     __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, nullable=False, index=True)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=True)
+    hashed_password = Column(String, nullable=False)  # ← это поле обязательно
+    is_active = Column(Boolean, default=True)
 
-    id = Column(Integer, primary_key=True, index=True)  # Уникальный Id
-    fullname = Column(String, nullable=False)  # ФИО
-    email = Column(String, unique=True, nullable=False, index=True)  # email (логин)
-    password_hash = Column(String, nullable=False)  # хэш пароля
-    is_active = Column(Boolean, default=True)  # активен ли аккаунт
 
     # Связь: у пользователя может быть несколько ролей
     roles = relationship("Role", secondary=user_roles, back_populates="users")
