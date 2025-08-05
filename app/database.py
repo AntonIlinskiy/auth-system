@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
+from app.config import settings
 from fastapi import Depends
 import os
 
@@ -9,7 +10,7 @@ import os
 load_dotenv()
 
 # Получаем строку подключения к ДБ из переменноых окружения
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = settings.DATABASE_URL
 
 # Создаем движок SQL Alchemy - управляет подключением к БД
 engine = create_engine(DATABASE_URL)

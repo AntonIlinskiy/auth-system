@@ -16,48 +16,45 @@ user_roles = Table(
 role_permissions = Table(
     "role_permissions",
     Base.metadata,
-    Column('role_id', ForeignKey('roles.id')),
-    Column('permission_id', ForeignKey('permissions.id'))
+    Column("role_id", ForeignKey("roles.id")),
+    Column("permission_id", ForeignKey("permissions.id"))
 )
+
 
 # Модель пользователя
 class User(Base):
     __tablename__ = "users"
+
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, nullable=False, index=True)
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=True)
-    hashed_password = Column(String, nullable=False)  # ← это поле обязательно
+    email = Column(String, unique=True, nullable=False)
+    password = Column(String, nullable=False)
+    first_name = Column(String)
+    last_name = Column(String)
     is_active = Column(Boolean, default=True)
 
 
-    # Связь: у пользователя может быть несколько ролей
     roles = relationship("Role", secondary=user_roles, back_populates="users")
 
 # Модель роли
 class Role(Base):
     __tablename__ = "roles"
 
-    id = Column(Integer, primary_key=True,)
-    name = Column(String, unique=True)  # Название роли
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True)
 
-    # Обратные связи
-    users = relationship("User", secondary=user_roles, back_populates="roles")
-    permissions = relationship("Permission", secondary=role_permissions, back_populates="roles")
+    users = relationship("User", secondary="user_roles", back_populates="roles")
+    permissions = relationship("Permission", secondary="role_permissions", back_populates="roles")
+
 
 
 # Модель разрешений
 class Permission(Base):
     __tablename__ = "permissions"
 
-    id = Column(Integer, primary_key=True,)
-    resource = Column(String, nullable=False)  # Название ресурса
-    action = Column(String, nullable=False)  # Действие
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True)
 
-    # Обратная связь: какое разрешение к какой роли отнсотится
-    roles = relationship("Role", secondary=role_permissions, back_populates="permissions")
-
-
+    roles = relationship("Role", secondary="role_permissions", back_populates="permissions")
 
 
 

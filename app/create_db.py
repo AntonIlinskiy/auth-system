@@ -1,5 +1,3 @@
-# create_db.py
-
 # Импортируем движок и базовый класс моделей
 from app.database import engine, Base
 

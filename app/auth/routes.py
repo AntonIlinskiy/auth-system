@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.auth.logic import create_user
@@ -15,6 +16,8 @@ def hash_password(password: str) -> str:
 router = APIRouter()
 
 @router.post("/register", response_model=UserOut)
+
+
 def register(user: UserCreate, db: Session = Depends(get_db)):
     print(">>> REGISTER DATA:", user.dict())  # для отладки
     existing_user = db.query(User).filter(User.email == user.email).first()
@@ -24,10 +27,11 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     hashed_pw = hash_password(user.password)
     db_user = User(
         email=user.email,
+        password=hashed_pw,
         first_name=user.first_name,
-        last_name=user.last_name,
-        hashed_password=hashed_pw,
+        last_name=user.last_name
     )
+
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List
 
 
@@ -71,3 +71,22 @@ class RoleSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+class RegisterRequest(BaseModel):
+    email: EmailStr
+    first_name: str
+    last_name: str
+    password: str = Field(min_length=6)
+    password_confirm: str = Field(min_length=6)
+
+class UserResponse(BaseModel):
+    id: int
+    email: EmailStr
+    first_name: str
+    last_name: str
+    is_active: bool
+
+    class Config:
+        from_attributes = True
+
+
