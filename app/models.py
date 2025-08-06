@@ -57,5 +57,5 @@ class Permission(Base):
     roles = relationship("Role", secondary="role_permissions", back_populates="permissions")
 
 
-
+is_active = Column(Boolean, default=True)
 

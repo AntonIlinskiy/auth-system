@@ -21,11 +21,6 @@ class UserCreateOut(BaseModel):
     is_active: bool
 
 
-
-
-
-
-#  Схема для логина пользователя
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
@@ -90,3 +85,8 @@ class UserResponse(BaseModel):
         from_attributes = True
 
 
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr]
+    first_name: Optional[str]
+    last_name: Optional[str]
+    password: Optional[str]
